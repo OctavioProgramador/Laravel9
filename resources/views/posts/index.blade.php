@@ -5,7 +5,7 @@
     <h1>Blog :DDDD</h1> 
     @foreach ($posts as $post)
         <h2> 
-            <a href="/blog/{{ $post->id}}">
+            <a href="{{ route('posts.show')}}">
                 {{ $post->title}}
             </a>
         </h2>
