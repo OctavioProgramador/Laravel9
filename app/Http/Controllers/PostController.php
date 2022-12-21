@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\SavePostRequest;
 
 class PostController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth', [
+            'except' => [
+                'index', 'show'
+            ]
+        ] );
+    }
     //
     public function index(){
         $posts = Post::get();
@@ -19,19 +27,24 @@ class PostController extends Controller
     }
 
     public function create(){
-        return view('posts.create');
+        return view('posts.create', ['post' => new Post]);
     }
 
-    public function store(Request $request){
-        $request->validate([
-            'title' => ['required'],
-            'body' => ['required'],
-        ]);
-        $post = new Post;
-        $post->title = $request->input('title');
-        $post->body = $request->input('body');
-        $post->save();
-        session()->flash('status','Post created');
-        return to_route('posts.index');
+    public function store(SavePostRequest $request){
+        Post::create($request->validated());
+        // session()->flash('status','Post created');
+        return to_route('posts.index')->with('status', 'Post created!');
+    }
+
+    public function edit(Post $post){
+        return view('posts.edit', ['post'=>$post]);
+    }
+
+    public function update(SavePostRequest $request, Post $post){
+        $post->update($request->validated());
+
+        // session()->flash('status','Post updated!');
+        return to_route('posts.show', $post)->with('status','Post updated!');
+
     }
 }
