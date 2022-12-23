@@ -32,6 +32,35 @@
                             Contact
                         </a>
                     </div>
+                    <div class="ml-auto">
+                    <div class="flex space-x-4">
+                        @guest
+                          <a href="{{ route('login') }}"
+                           class="px-3 py-2 text-sm font-medium rounded-md hover:text-sky-600 dark:hover:text-white {{ request()->routeIs('login') ? 'text-sky-600 dark:text-white' : 'text-slate-400' }}">
+                            Login
+                        </a>  
+                        <a href="{{ route('register') }}"
+                           class="px-3 py-2 text-sm font-medium rounded-md hover:text-sky-600 dark:hover:text-white {{ request()->routeIs('register') ? 'text-sky-600 dark:text-white' : 'text-slate-400' }}">
+                            Register
+                        </a>   
+                        @else
+                            <a href="#" 
+                            class="text-black">
+                                {{ Auth::user()->name }}
+                            </a>
+                             <form action="{{ route('logout')}}" method="POST">
+                                @csrf
+                                <a class="px-3 py-2 text-sm font-medium rounded-md hover:text-sky-600 dark:hover:text-white" 
+                                href='#'
+                                onclick="this.closest('form').submit()"
+                                >
+                                    Logout
+                                </a>
+                            </form>
+                        @endguest
+
+                                                
+                    </div>
                 </div>
             </div>
         </div>
